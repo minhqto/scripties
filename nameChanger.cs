@@ -17,7 +17,6 @@ namespace nameChangeSpace
 		public static bool changed = false;
 	}
 	
-	
 	public class Form1 : Form
 	{
 		private ComboBox cb;
@@ -106,6 +105,7 @@ namespace nameChangeSpace
 		private Label title = new Label();
 		private CComponentType comp;
 		private Button closeButton = new Button();
+		private int prop_id;
 		
 		public Form2()
 		{
@@ -121,7 +121,7 @@ namespace nameChangeSpace
 			this.select.Text = "Change";
 			this.select.Location = new Point(280, 260);
 			this.select.Size = new Size(120, 25);
-			//this.select.Click += new System.EventHandler(changeBtn_Click);
+			this.select.Click += new System.EventHandler(changeBtn_Click);
 			
 			this.closeButton.Text = "Close";
 			this.closeButton.Location = new Point (280, 300);
@@ -143,6 +143,7 @@ namespace nameChangeSpace
 				propsBox.BeginUpdate();
 				for(int i = 0; i < this.comp.Properties.Count; i++){
 					propsBox.Items.Add(this.comp.Properties[i]);
+				
 				}
 				propsBox.EndUpdate();
 				this.Show();
@@ -152,67 +153,24 @@ namespace nameChangeSpace
 			}
 		}
 		
-		private void changeBtn_Click()
+		private void changeBtn_Click(object sender, System.EventArgs e)
 		{
-			
-		}
-	}
-
-	
-	/*public class NameChanger{
-		
-		public NameChanger(){}
-
-		public CComponentType [] grabComps()
-		{
-			CObjectModel objModel = ABACUSScriptingModule.ABACUSModel;
-			CComponentTypeCollection rootComps = objModel.ComponentTypes;
-			CComponentType[] allComps = rootComps.Clone();
-			
-			return allComps; //allComps just has the component types. each component type has properties. 
-		}
-				
-		public void changeName(CComponentType toChange)
-		{
-			string oldName = toChange.Name;
-			string newName = Interaction.InputBox("Enter in the new component type name", "Change Name", toChange.ToString());
-			toChange.Name = newName;
-			MessageBox.Show("Component type " + "\"" + oldName + "\"" + " changed to " + "\"" + newName + "\"");
-			WasChanged.changed = true;
-		
-		}
-			
-			
-		public static void checkMatch(string src)
-		{
-			CObjectModel objModel = ABACUSScriptingModule.ABACUSModel;
-			CComponentTypeCollection rootComps = objModel.ComponentTypes;
-			CComponentType[] allComps = rootComps.Clone();
-			
-			bool match = false;
-			foreach(CComponentType c in allComps){
-			
-				if(c.Name == src){
-					MessageBox.Show("There's a match!");
-					match = true;
-					long eeid = c.EEID;
-					//changeName(eeid);
-					//confirms that the eeid is returned.
-					MessageBox.Show(eeid.ToString());
-					ComboBox cb = new ComboBox();
-		
-					cb.Show();
+			for(int i = 0; i < this.comp.Properties.Count; i++){
+				if(propsBox.SelectedIndex == i){
+					prop_id = i;
 				}
 			}
-			if(match == false){
-				MessageBox.Show("No component of that name found!", "Error");
+			
+			try{
+				this.comp.Properties[prop_id].Name = Interaction.InputBox("Enter the new property name", "Change Property Name", this.comp.Properties[prop_id].Name.ToString());
+				MessageBox.Show("Name successfully changed. Make sure to save the file!");
+			}	
+			catch(ZeroLengthException exception){
+				MessageBox.Show("No changes were made.");
 			}
 		}
-			
-	
-	}*/
-	
-  public class mainClass
+	}
+	public class mainClass
 	{
 		public static void Main() 
 		{
@@ -225,4 +183,3 @@ namespace nameChangeSpace
 		}
 	}
 }
-
